@@ -101,7 +101,7 @@ class DropTarget: NSView {
     // Combine the location and file types in the arguments
     let arguments: [String: Any] = [
       "location": convertPoint(sender.draggingLocation),
-      "fileTypes": fileTypes,
+      "formats": fileTypes,
     ]
 
     channel.invokeMethod("entered", arguments: arguments)
