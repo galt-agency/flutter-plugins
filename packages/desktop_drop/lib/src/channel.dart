@@ -59,15 +59,23 @@ class DesktopDrop {
   Future<void> _handleMethodChannel(MethodCall call) async {
     switch (call.method) {
       case "entered":
-        final position = (call.arguments as List).cast<double>();
+        final position = (call.arguments["location"] as List).cast<double>();
+        final formats = (call.arguments["formats"] as List).cast<String>();
         _offset = Offset(position[0], position[1]);
-        _notifyEvent(DropEnterEvent(location: _offset!));
+        _notifyEvent(DropEnterEvent(
+          location: _offset!,
+          formats: formats,
+        ));
         break;
       case "updated":
         if (_offset == null && Platform.isLinux) {
-          final position = (call.arguments as List).cast<double>();
+          final position = (call.arguments["location"] as List).cast<double>();
+          final formats = (call.arguments["formats"] as List).cast<String>();
           _offset = Offset(position[0], position[1]);
-          _notifyEvent(DropEnterEvent(location: _offset!));
+          _notifyEvent(DropEnterEvent(
+            location: _offset!,
+            formats: formats,
+          ));
           return;
         }
         final position = (call.arguments as List).cast<double>();

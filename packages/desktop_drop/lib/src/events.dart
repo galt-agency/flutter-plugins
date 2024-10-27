@@ -13,7 +13,10 @@ abstract class DropEvent {
 }
 
 class DropEnterEvent extends DropEvent {
-  DropEnterEvent({required Offset location}) : super(location);
+  DropEnterEvent({
+    required Offset location,
+    required List<String> formats,
+  }) : super(location);
 }
 
 class DropExitEvent extends DropEvent {
