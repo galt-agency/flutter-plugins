@@ -20,12 +20,13 @@ class DropDoneDetails {
 
 class DropEventDetails {
   DropEventDetails({
+    required this.formats,
     required this.localPosition,
     required this.globalPosition,
   });
 
+  final List<String>? formats;
   final Offset localPosition;
-
   final Offset globalPosition;
 }
 
@@ -187,6 +188,7 @@ class _DropTargetState extends State<DropTarget> {
     assert(!debugRequiredStatus || _status != status);
     _status = status;
     final details = DropEventDetails(
+      formats: formats,
       localPosition: localLocation,
       globalPosition: globalLocation,
     );
