@@ -101,6 +101,7 @@ class _DropTargetState extends State<DropTarget> {
           _DragTargetStatus.idle,
           localLocation: Offset.zero,
           globalLocation: Offset.zero,
+          formats: null,
         );
       }
     }
@@ -122,6 +123,7 @@ class _DropTargetState extends State<DropTarget> {
           _DragTargetStatus.enter,
           globalLocation: globalPosition,
           localLocation: position,
+          formats: (event).formats,
         );
       }
     } else if (event is DropUpdateEvent) {
@@ -130,6 +132,7 @@ class _DropTargetState extends State<DropTarget> {
           _DragTargetStatus.enter,
           globalLocation: globalPosition,
           localLocation: position,
+          formats: null,
         );
       } else if ((_status == _DragTargetStatus.enter ||
               _status == _DragTargetStatus.update) &&
@@ -139,12 +142,14 @@ class _DropTargetState extends State<DropTarget> {
           globalLocation: globalPosition,
           localLocation: position,
           debugRequiredStatus: false,
+          formats: null,
         );
       } else if (_status != _DragTargetStatus.idle && !inBounds) {
         _updateStatus(
           _DragTargetStatus.idle,
           globalLocation: globalPosition,
           localLocation: position,
+          formats: null,
         );
       }
     } else if (event is DropExitEvent && _status != _DragTargetStatus.idle) {
@@ -152,6 +157,7 @@ class _DropTargetState extends State<DropTarget> {
         _DragTargetStatus.idle,
         globalLocation: globalPosition,
         localLocation: position,
+        formats: null,
       );
     } else if (event is DropDoneEvent &&
         (_status != _DragTargetStatus.idle || Platform.isLinux) &&
@@ -161,6 +167,7 @@ class _DropTargetState extends State<DropTarget> {
         debugRequiredStatus: false,
         globalLocation: globalPosition,
         localLocation: position,
+        formats: null,
       );
       widget.onDragDone?.call(DropDoneDetails(
         files: event.files,
@@ -175,6 +182,7 @@ class _DropTargetState extends State<DropTarget> {
     bool debugRequiredStatus = true,
     required Offset localLocation,
     required Offset globalLocation,
+    required List<String>? formats,
   }) {
     assert(!debugRequiredStatus || _status != status);
     _status = status;
