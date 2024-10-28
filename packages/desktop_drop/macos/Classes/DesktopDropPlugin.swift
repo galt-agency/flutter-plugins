@@ -89,19 +89,24 @@ class DropTarget: NSView {
   }
 
   override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-    // Get the pasteboard items to check the types being dragged
-    let pasteboard = sender.draggingPasteboard
-    var fileTypes: [String] = []
+    // Initialize an array to hold file extensions
+    var fileExtensions: [String] = []
 
-    if let types = pasteboard.types {
-      // Collect the types as strings
-      fileTypes = types.map { $0.rawValue }
+    // Enumerate the dragging items to check if they are file URLs
+    sender.enumerateDraggingItems(
+      options: [], for: nil, classes: [NSURL.self], searchOptions: [.urlReadingFileURLsOnly: true]
+    ) { draggingItem, _, _ in
+      if let fileURL = draggingItem.item as? URL {
+        if let fileExtension = fileURL.pathExtension.lowercased() as String?, !fileExtension.isEmpty {
+          fileExtensions.append(fileExtension)
+        }
+      }
     }
 
     // Combine the location and file types in the arguments
     let arguments: [String: Any] = [
       "location": convertPoint(sender.draggingLocation),
-      "formats": fileTypes,
+      "formats": fileExtensions,
     ]
 
     channel.invokeMethod("entered", arguments: arguments)
